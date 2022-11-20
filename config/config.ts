@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config();
+
 export const DB_USER = process.env.DB_USER || 'root';
 export const DB_PASSWORD = process.env.DB_PASSWORD || '';
 export const DB_NAME = process.env.DB_NAME || 'product_db';
