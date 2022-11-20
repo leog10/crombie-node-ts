@@ -29,9 +29,18 @@ Product.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: DataTypes.STRING,
-    brand: DataTypes.STRING,
-    price: DataTypes.NUMBER,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    brand: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.NUMBER,
+      allowNull: false,
+    },
   },
   {
     sequelize,
