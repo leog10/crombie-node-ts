@@ -1,7 +1,6 @@
 import app from './app';
+import { PORT } from './config/config';
 import sequelize from './models';
-
-const PORT = process.env.PORT || 5000;
 
 const main = async () => {
   try {

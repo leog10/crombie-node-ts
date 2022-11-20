@@ -9,11 +9,25 @@ export const getProducts = async (
   brand: string
 ) => {
   try {
+    const nextLimit = offset + limit;
+
+    const pageInfoFormatter = (productsCount: number, pages: number) => {
+      return productsCount === 0
+        ? '0'
+        : offset + 1 === nextLimit || offset + 1 === productsCount
+        ? `${offset + 1} of ${productsCount}`
+        : nextLimit > productsCount
+        ? `${offset + 1}-${productsCount} of ${productsCount}`
+        : pages === 1
+        ? `1-${productsCount} of ${productsCount}`
+        : `${offset + 1}-${nextLimit} of ${productsCount}`;
+    };
+
     // Find product where name and brand starts with the respective queries case insensitive.
     if (name || brand) {
       const products = await Product.findAndCountAll({
         where: {
-          [Op.and]: [
+          [Op.or]: [
             {
               name: {
                 [Op.startsWith]: `${name}%`,
@@ -32,7 +46,8 @@ export const getProducts = async (
 
       if (products) {
         const totalPages = Math.ceil(products.count / limit);
-        return { products, page, totalPages };
+        const info = pageInfoFormatter(products.count, totalPages);
+        return { products, page, totalPages, info };
       }
       return undefined;
     }
@@ -45,7 +60,8 @@ export const getProducts = async (
 
     if (products) {
       const totalPages = Math.ceil(products.count / limit);
-      return { products, page, totalPages };
+      const info = pageInfoFormatter(products.count, totalPages);
+      return { products, page, totalPages, info };
     }
     return undefined;
   } catch (error) {
